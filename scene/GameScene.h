@@ -54,7 +54,7 @@ private: // メンバ変数
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
-	//
+	// 自キャラ
 	Player* player_ = nullptr;
 
 	/// <summary>

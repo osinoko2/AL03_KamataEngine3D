@@ -10,10 +10,11 @@ class Player {
 public:
 	/// <summary>
 	/// 初期化
-	/// </summary
+	/// </summary>
 	/// <param name = "model">モデル</param>
-	/// <parm name = "textureHandle">テクスチャハンドル</param>
-	void Intialize(Model* model, uint32_t textureHandle);
+	/// <param name = "textureHandle">テクスチャハンドル</param>
+	/// <param name = "viewProjection">ビュープロジェクション</param>
+	void Intialize(Model* model, uint32_t textureHandle ,ViewProjection* viewProjection);
 
 	/// <summary>
 	/// 更新
@@ -32,4 +33,5 @@ private:
 	Model* model_ = nullptr;
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+	ViewProjection* viewProjection_ = nullptr;
 };
