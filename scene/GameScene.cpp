@@ -62,11 +62,11 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	// 3Dオブジェクト描画後処理
-	Model::PostDraw();
-
 	// 自キャラの描画
 	player_->Draw();
+
+	// 3Dオブジェクト描画後処理
+	Model::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画
