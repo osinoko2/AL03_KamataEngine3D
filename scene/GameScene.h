@@ -4,10 +4,12 @@
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
-#include "Player.h"
+//#include "Player.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include <vector>
+#include "DebugCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -50,12 +52,24 @@ private: // メンバ変数
 
 	// 3Dモデルデータ
 	Model* model_ = nullptr;
+	Model* modelBlock_ = nullptr;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
 	// 自キャラ
-	Player* player_ = nullptr;
+	//Player* player_ = nullptr;
+
+	// ワールド変換データ
+	WorldTransform worldTransform_;
+	std::vector <std::vector< WorldTransform* >> worldTransformBlocks_;
+
+	// デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	// 
+	DebugCamera* debugCamera_ = nullptr;
+
 
 	/// <summary>
 	/// ゲームシーン用
