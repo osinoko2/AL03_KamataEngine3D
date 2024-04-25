@@ -107,8 +107,8 @@ void GameScene::Update() {
 	if (isDebugCameraActive_) {
 		// デバッグカメラの更新
 		debugCamera_->Update();
-		viewProjection_.matView = MakePerspectiveFovMatrix(viewProjection_.fovAngleY, viewProjection_.aspectRatio, viewProjection_.nearZ, viewProjection_.farZ);
-		viewProjection_.matProjection = MakeOrthographicMatrix(0.0f, 0.0f, 2.5f, 2.5f, viewProjection_.nearZ, viewProjection_.farZ);
+		viewProjection_.matView = debugCamera_->GetMatView()/*MakePerspectiveFovMatrix(viewProjection_.fovAngleY, viewProjection_.aspectRatio, viewProjection_.nearZ, viewProjection_.farZ)*/;
+		viewProjection_.matProjection = debugCamera_->GetmatProjection()/*MakeOrthographicMatrix(, 0.0f, 2.5f, 2.5f, viewProjection_.nearZ, viewProjection_.farZ)*/;
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {

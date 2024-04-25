@@ -26,6 +26,10 @@ public:
 	/// <returns>ビュープロジェクション</returns>
 	const ViewProjection& GetViewProjection() { return viewProjection_; }
 
+	const Matrix4x4 GetMatView() { return viewProjection_.matView; }
+
+	const Matrix4x4 GetmatProjection() { return viewProjection_.matProjection; }
+
 	/// <summary>
 	/// プロジェクション行列計算用のメンバ設定関数群
 	/// </summary>
