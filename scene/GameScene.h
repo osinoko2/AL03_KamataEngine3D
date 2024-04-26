@@ -11,6 +11,7 @@
 #include "WorldTransform.h"
 #include <vector>
 #include "DebugCamera.h"
+#include "Function.h"
 
 /// <summary>
 /// ゲームシーン

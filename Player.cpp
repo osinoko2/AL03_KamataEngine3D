@@ -1,12 +1,11 @@
 #include "Player.h"
 #include "cassert"
 
-void Player::Intialize(Model* model, uint32_t textureHandle ,ViewProjection* viewProjection) {
+void Player::Intialize(Model* model,ViewProjection* viewProjection) {
 	// NULLポインタチェック
 	assert(model);
 
-	//model_ = model;
-	textureHandle_ = textureHandle;
+	model_ = model;
 	viewProjection_ = viewProjection;
 
 	worldTransform_.Initialize();
@@ -14,11 +13,10 @@ void Player::Intialize(Model* model, uint32_t textureHandle ,ViewProjection* vie
 
 void Player::Update() {
 
-	worldTransform_.TransferMatrix();
 	// 行列を更新して定数バッファに転送
-	//worldTransform_.UpdateMatrix();
+	worldTransform_.UpdateMatrix();
 }
 
 void Player::Draw() {
-	model_->Draw(worldTransform_, *viewProjection_, textureHandle_); 
+	model_->Draw(worldTransform_, *viewProjection_); 
 }
