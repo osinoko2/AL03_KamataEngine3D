@@ -4,7 +4,8 @@
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
-//#include "Player.h"
+#include "Player.h"
+#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -53,12 +54,16 @@ private: // メンバ変数
 	// 3Dモデルデータ
 	Model* model_ = nullptr;
 	Model* modelBlock_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
 	// 自キャラ
-	//Player* player_ = nullptr;
+	Player* player_ = nullptr;
+
+	// 天球
+	Skydome* skydome_ = nullptr;
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;

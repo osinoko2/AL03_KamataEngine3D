@@ -6,9 +6,11 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
-	// delete player_;
+	delete player_;
 	delete modelBlock_;
 	delete debugCamera_;
+	delete skydome_;
+	delete modelSkydome_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -29,14 +31,20 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	modelBlock_ = Model::Create();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
 	// 自キャラの生成
-	// player_ = new Player();
+	player_ = new Player();
 	// 自キャラの初期化
-	// player_->Intialize(model_, textureHandle_, &viewProjection_);
+	player_->Intialize(model_, textureHandle_, &viewProjection_);
+
+	// 
+	skydome_ = new Skydome();
+	// 
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
@@ -62,6 +70,10 @@ void GameScene::Initialize() {
 	}
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+
+	// 
+	viewProjection_.farZ = 10.0f;
+	viewProjection_.Initialize();
 }
 
 Matrix4x4 MakeScaleMatrix(const Vector3& scale);
@@ -75,7 +87,10 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 void GameScene::Update() {
 	// 自キャラの更新
-	// player_->Update();
+	player_->Update();
+
+	// 
+	skydome_->Update();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -107,8 +122,8 @@ void GameScene::Update() {
 	if (isDebugCameraActive_) {
 		// デバッグカメラの更新
 		debugCamera_->Update();
-		viewProjection_.matView = MakePerspectiveFovMatrix(viewProjection_.fovAngleY, viewProjection_.aspectRatio, viewProjection_.nearZ, viewProjection_.farZ);
-		viewProjection_.matProjection = MakeOrthographicMatrix(0.0f, 0.0f, 2.5f, 2.5f, viewProjection_.nearZ, viewProjection_.farZ);
+		viewProjection_.matView = debugCamera_->GetMatView();
+		viewProjection_.matProjection = debugCamera_->GetmatProjection();
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
@@ -145,7 +160,10 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// 自キャラの描画
-	// player_->Draw();
+	player_->Draw();
+
+	// 
+	skydome_->Draw();
 
 	// ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
