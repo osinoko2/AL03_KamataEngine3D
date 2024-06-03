@@ -12,6 +12,7 @@
 #include <vector>
 #include "DebugCamera.h"
 #include "Function.h"
+#include "MapChipFeild.h"
 
 /// <summary>
 /// ゲームシーン
@@ -73,9 +74,13 @@ private: // メンバ変数
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
 
-	// 
+	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
+	// マップチップフィールド
+	MapChipFeild* mapChipField_;
+
+	void GenerateBlocks();
 
 	/// <summary>
 	/// ゲームシーン用
