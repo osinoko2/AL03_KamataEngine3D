@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Function.h"
 #include <cassert>
 
 void Player::Initialize(Model* model, uint32_t textureHandle) {

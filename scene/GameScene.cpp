@@ -18,7 +18,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("Rock.png");
+	textureHandle_ = TextureManager::Load("mario.jpg");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
@@ -36,7 +36,6 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
-	
 }
 
 void GameScene::Draw() {
