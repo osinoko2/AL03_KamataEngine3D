@@ -88,6 +88,12 @@ void Player::Draw(ViewProjection& viewProjection) {
 
 void Player::Attack() {
 	if (input_->PushKey(DIK_SPACE)) {
+		// 弾があれば解放する
+		if (bullet_) {
+			delete bullet_;
+			bullet_ = nullptr;
+		}
+
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_);
@@ -107,4 +113,9 @@ void Player::Rotate() {
 	} else if (input_->PushKey(DIK_D)) {
 		worldTransform_.rotation_.y += kRotSpeed;
 	}
+}
+
+Player::~Player() {
+	// bullet_の解放
+	delete bullet_;
 }

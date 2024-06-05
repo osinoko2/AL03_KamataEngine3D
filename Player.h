@@ -28,6 +28,11 @@ public:
 
 	void Rotate();
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Player();
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
