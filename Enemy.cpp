@@ -17,12 +17,38 @@ void Enemy::Initialize(Model* model, const Vector3& position) {
 }
 
 void Enemy::Update() { 
-	// 座標を移動させる
-	worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
-	worldTransform_.translation_.z += velocity_.z;
-
+	switch (phase_) {
+	case Phase::Approach:
+	default:
+		ApproachUpdate();
+		break;
+	case Phase::Leave:
+		LeaveUpdate();
+		break;
+	}
+	
 	worldTransform_.UpdateMatrix(); 
+}
+
+void Enemy::ApproachUpdate() {
+	// 移動
+	worldTransform_.translation_.x += ApproachVelocity_.x;
+	worldTransform_.translation_.y += ApproachVelocity_.y;
+	worldTransform_.translation_.z += ApproachVelocity_.z;
+	// 規定の位置に到達したら離脱
+	if (worldTransform_.translation_.z < 0.0f) {
+		phase_ = Phase::Leave;
+	}
+	worldTransform_.UpdateMatrix();
+}
+
+void Enemy::LeaveUpdate() {
+	// 移動
+	worldTransform_.translation_.x += LeaveVelocity_.x;
+	worldTransform_.translation_.y += LeaveVelocity_.y;
+	worldTransform_.translation_.z += LeaveVelocity_.z;
+
+	worldTransform_.UpdateMatrix();
 }
 
 void Enemy::Draw(ViewProjection& viewProjection) { 

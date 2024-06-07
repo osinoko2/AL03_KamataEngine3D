@@ -72,6 +72,8 @@ private: // メンバ変数
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
+	Vector3 EnemyPosition = {0.0f, 2.0f, 40.0f};
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

@@ -39,7 +39,7 @@ void GameScene::Initialize() {
 	enemy_ = new Enemy();
 
 	// 敵の初期化
-	enemy_->Initialize(EnemyModel_, worldTransform_.translation_);
+	enemy_->Initialize(EnemyModel_, EnemyPosition);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
