@@ -1,6 +1,6 @@
 #include "Enemy.h"
-#include <cassert>
 #include "TextureManager.h"
+#include <cassert>
 
 void Enemy::Initialize(Model* model, const Vector3& position) {
 	// NULLポインタチェック
@@ -16,7 +16,7 @@ void Enemy::Initialize(Model* model, const Vector3& position) {
 	worldTransform_.translation_ = position;
 }
 
-void Enemy::Update() { 
+void Enemy::Update() {
 	switch (phase_) {
 	case Phase::Approach:
 	default:
@@ -26,8 +26,8 @@ void Enemy::Update() {
 		LeaveUpdate();
 		break;
 	}
-	
-	worldTransform_.UpdateMatrix(); 
+
+	worldTransform_.UpdateMatrix();
 }
 
 void Enemy::ApproachUpdate() {
@@ -51,6 +51,6 @@ void Enemy::LeaveUpdate() {
 	worldTransform_.UpdateMatrix();
 }
 
-void Enemy::Draw(ViewProjection& viewProjection) { 
-	model_->Draw(worldTransform_, viewProjection, textureHandle_); 
+void Enemy::Draw(ViewProjection& viewProjection) {
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }

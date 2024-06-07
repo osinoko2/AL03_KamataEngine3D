@@ -47,7 +47,5 @@ private:
 	Vector3 LeaveVelocity_ = {-0.2f, 0.2f, -0.1f};
 
 	// フェーズ
-	//Phase Approach;
-	//Phase Leave;
 	Phase phase_ = Phase::Approach;
 };
