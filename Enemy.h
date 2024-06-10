@@ -1,6 +1,8 @@
 #pragma once
 #include <Model.h>
 #include <WorldTransform.h>
+#include "EnemyBullet.h"
+#include <list>
 
 // 行動フェーズ
 enum class Phase {
@@ -18,6 +20,9 @@ public:
 	/// </summary>
 	void Initialize(Model* model, const Vector3& position);
 
+	// 接近フェーズ初期化
+	void ApproachInitialize();
+
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -32,6 +37,19 @@ public:
 	/// </summary>
 	void Draw(ViewProjection& viewProjection);
 
+	/// <summary>
+	/// 弾発射
+	/// </summary>
+	void Fire();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Enemy();
+
+	// 発射間隔
+	static const int kFireInterval = 60;
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -45,7 +63,14 @@ private:
 	// 速度
 	Vector3 ApproachVelocity_ = {0.0f, 0.0f, -0.1f};
 	Vector3 LeaveVelocity_ = {-0.2f, 0.2f, -0.1f};
+	Vector3 BulletVelocity_ = {0.0f, 0.0f, -1.0f};
 
 	// フェーズ
 	Phase phase_ = Phase::Approach;
+
+	// 弾
+	std::list<EnemyBullet*> bullets_;
+
+	// 発射タイマー
+	int32_t fireTimer = 0;
 };
