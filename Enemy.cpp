@@ -27,13 +27,7 @@ void Enemy::ApproachInitialize() {
 }
 
 void Enemy::Update() {
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
+	
 
 	for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
@@ -43,11 +37,22 @@ void Enemy::Update() {
 	case Phase::Approach:
 	default:
 		ApproachUpdate();
+
 		break;
 	case Phase::Leave:
 		LeaveUpdate();
 		break;
 	}
+	
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+
+	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	worldTransform_.UpdateMatrix();
 }
@@ -73,7 +78,7 @@ void Enemy::ApproachUpdate() {
 	if (worldTransform_.translation_.z < 0.0f) {
 		phase_ = Phase::Leave;
 	}
-	worldTransform_.UpdateMatrix();
+	//worldTransform_.UpdateMatrix();
 }
 
 void Enemy::LeaveUpdate() {
@@ -82,7 +87,7 @@ void Enemy::LeaveUpdate() {
 	worldTransform_.translation_.y += LeaveVelocity_.y;
 	worldTransform_.translation_.z += LeaveVelocity_.z;
 
-	worldTransform_.UpdateMatrix();
+	//worldTransform_.UpdateMatrix();
 }
 
 void Enemy::Draw(ViewProjection& viewProjection) {
@@ -121,14 +126,14 @@ Enemy::~Enemy() {
 	for (EnemyBullet* bullet : bullets_) {
 		delete bullet;
 	}
-	bullets_.clear();
+	//bullets_.clear();
 }
+
+void Enemy::OnCollision() {}
 
 Vector3 Enemy::GetWorldPosition() {
 	// ワールド座標を入れる変数
 	Vector3 worldPos;
-
-	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	// ワールド行列の平行移動成分を取得
 	worldPos.x = worldTransform_.matWorld_.m[3][0];

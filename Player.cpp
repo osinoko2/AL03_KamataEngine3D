@@ -82,7 +82,7 @@ void Player::Update() {
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	// 行列を定数バッファに転送
-	worldTransform_.UpdateMatrix();
+	worldTransform_.TransferMatrix();
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
@@ -137,8 +137,6 @@ Vector3 Player::GetWorldPosition() {
 	// ワールド座標を入れる変数
 	Vector3 worldPos;
 
-	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
 	// ワールド行列の平行移動成分を取得
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
@@ -146,3 +144,5 @@ Vector3 Player::GetWorldPosition() {
 
 	return worldPos;
 }
+
+void Player::OnCollision() {}

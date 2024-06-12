@@ -4,6 +4,8 @@
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "Function.h"
+#include <math.h>
 
 GameScene::GameScene() {}
 
@@ -56,6 +58,7 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
 	// 自キャラの更新
 	player_->Update();
 
@@ -81,6 +84,8 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
+
+	CheckAllCollisions();
 }
 
 void GameScene::Draw() {
@@ -134,4 +139,47 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::CheckAllCollisions() {
+	// 判定対象AとBの座標
+	Vector3 posA, posB;
+
+	// 自弾リストの取得
+	//const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+
+	// 敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+	#pragma region 自キャラと敵弾の当たり判定
+
+	// 自キャラの座標
+	posA = player_->GetWorldPosition();
+
+	// 自キャラと敵弾全ての当たり判定
+	for (EnemyBullet* bullet : enemyBullets) {
+		// 敵弾の座標
+		posB = bullet->GetBulletPosition();
+		
+		Vector3 distance;
+		distance.x = posB.x - posA.x;
+		distance.y = posB.y - posA.y;
+		distance.z = posB.z - posA.z;
+
+
+		// 球と球の交差判定
+		if (sqrtf(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z) <= 2.0f) {
+			// 自キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+	#pragma endregion
+
+	#pragma region 自弾と敵キャラの当たり判定
+	#pragma endregion
+
+	#pragma region 自弾と敵弾の当たり判定
+	#pragma endregion
 }

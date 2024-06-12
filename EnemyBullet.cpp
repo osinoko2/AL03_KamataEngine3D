@@ -1,6 +1,7 @@
 #include "EnemyBullet.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "Function.h"
 
 void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 	// NULLポインタチェック
@@ -26,14 +27,23 @@ void EnemyBullet::Update() {
 	worldTransform_.translation_.z += velocity_.z;
 
 	worldTransform_.UpdateMatrix();
-
-	// 時間経過でデス
-	if (--deathTimer_ <= 0) {
-		isDead_ = true;
-	}
 }
 
 void EnemyBullet::Draw(ViewProjection& viewProjection) {
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
+
+Vector3 EnemyBullet::GetBulletPosition() {
+	// ワールド座標を入れる変数
+	Vector3 bulletPos;
+
+	// ワールド行列の平行移動成分を取得
+	bulletPos.x = worldTransform_.matWorld_.m[3][0];
+	bulletPos.y = worldTransform_.matWorld_.m[3][1];
+	bulletPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return bulletPos;
+}
+
+void EnemyBullet::OnCollision() { isDead_ = true; }
