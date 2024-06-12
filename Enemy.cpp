@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "Function.h"
+#include "Player.h"
 
 void Enemy::Initialize(Model* model, const Vector3& position) {
 	// NULLポインタチェック
@@ -92,7 +94,21 @@ void Enemy::Draw(ViewProjection& viewProjection) {
 }
 
 void Enemy::Fire() {
+	assert(player_);
+
+	// 弾の速さ (調整項目)
+	//const float kBulletSpeed = 1.0f;
 	
+	Vector3 PlayerPosition = player_->GetWorldPosition();
+	Vector3 EnemyPosition = GetWorldPosition();
+	Vector3 DifferenceVector;
+	DifferenceVector.x = PlayerPosition.x - EnemyPosition.x;
+	DifferenceVector.y = PlayerPosition.y - EnemyPosition.y;
+	DifferenceVector.z = PlayerPosition.z - EnemyPosition.z;
+	Vector3 ADVector = Normalize(DifferenceVector);
+	BulletVelocity_ = ADVector;
+
+
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, BulletVelocity_);
@@ -106,4 +122,18 @@ Enemy::~Enemy() {
 		delete bullet;
 	}
 	bullets_.clear();
+}
+
+Vector3 Enemy::GetWorldPosition() {
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+
+	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+	// ワールド行列の平行移動成分を取得
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
 }
