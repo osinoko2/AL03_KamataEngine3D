@@ -106,7 +106,7 @@ void Player::Attack() {
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(bullletmodel_, worldTransform_.translation_, velocity);
 
 		// 弾の登録する
 		bullets_.push_back(newBullet);
@@ -119,6 +119,8 @@ Player::~Player() {
 		delete bullet;
 	}
 	bullets_.clear();
+
+	delete bullletmodel_;
 }
 
 void Player::Rotate() {

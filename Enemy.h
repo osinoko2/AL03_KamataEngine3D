@@ -69,13 +69,14 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
+	Model* bulletmodel_ = Model::Create();
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
 	// 速度
-	Vector3 ApproachVelocity_ = {0.0f, 0.0f, -0.1f};
-	Vector3 LeaveVelocity_ = {-0.2f, 0.2f, -0.1f};
+	Vector3 ApproachVelocity_ = {0.0f, 0.0f, -0.05f};
+	Vector3 LeaveVelocity_ = {-0.2f, 0.2f, -0.05f};
 	Vector3 BulletVelocity_ = {0.0f, 0.0f, -1.0f};
 
 	// フェーズ

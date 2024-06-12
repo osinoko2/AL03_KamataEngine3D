@@ -9,7 +9,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	model_ = model;
 
 	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("Explosion.png");
+	textureHandle_ = TextureManager::Load("uvChecker.png");
 
 	worldTransform_.Initialize();
 

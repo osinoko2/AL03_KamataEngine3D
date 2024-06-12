@@ -49,6 +49,7 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
+	Model* bullletmodel_ = Model::Create();
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;

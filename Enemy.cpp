@@ -116,7 +116,7 @@ void Enemy::Fire() {
 
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->Initialize(model_, worldTransform_.translation_, BulletVelocity_);
+	newBullet->Initialize(bulletmodel_, worldTransform_.translation_, BulletVelocity_);
 
 	// 弾の登録する
 	bullets_.push_back(newBullet);
@@ -127,6 +127,8 @@ Enemy::~Enemy() {
 		delete bullet;
 	}
 	//bullets_.clear();
+
+	delete bulletmodel_;
 }
 
 void Enemy::OnCollision() {}

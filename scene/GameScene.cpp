@@ -146,7 +146,7 @@ void GameScene::CheckAllCollisions() {
 	Vector3 posA, posB;
 
 	// 自弾リストの取得
-	//const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 
 	// 敵弾リストの取得
 	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
@@ -160,7 +160,7 @@ void GameScene::CheckAllCollisions() {
 	for (EnemyBullet* bullet : enemyBullets) {
 		// 敵弾の座標
 		posB = bullet->GetBulletPosition();
-		
+
 		Vector3 distance;
 		distance.x = posB.x - posA.x;
 		distance.y = posB.y - posA.y;
@@ -168,7 +168,7 @@ void GameScene::CheckAllCollisions() {
 
 
 		// 球と球の交差判定
-		if (sqrtf(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z) <= 2.0f) {
+		if (sqrtf(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z) <= 1.0f) {
 			// 自キャラの衝突時コールバックを呼び出す
 			player_->OnCollision();
 			// 敵弾の衝突時コールバックを呼び出す
@@ -178,8 +178,53 @@ void GameScene::CheckAllCollisions() {
 	#pragma endregion
 
 	#pragma region 自弾と敵キャラの当たり判定
+
+	// 敵キャラの座標
+	posB = enemy_->GetWorldPosition();
+
+	// 自弾全てと敵キャラの当たり判定
+	for (PlayerBullet* bullet : playerBullets) {
+		// 自弾の座標
+		posA = bullet->GetBulletPosition();
+
+		Vector3 distance;
+		distance.x = posB.x - posA.x;
+		distance.y = posB.y - posA.y;
+		distance.z = posB.z - posA.z;
+
+		if (sqrtf(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z) <= 1.0f) {
+			// 自弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+			// 敵キャラの衝突時コールバックを呼び出す
+			enemy_->OnCollision();
+		}
+	}
+
 	#pragma endregion
 
 	#pragma region 自弾と敵弾の当たり判定
+
+	for (PlayerBullet* shotbullet : playerBullets) {
+		for (EnemyBullet* firebullet : enemyBullets) {
+			// 自弾の座標
+			posA = shotbullet->GetBulletPosition();
+
+			// 敵弾の座標
+			posB = firebullet->GetBulletPosition();
+
+			Vector3 distance;
+			distance.x = posB.x - posA.x;
+			distance.y = posB.y - posA.y;
+			distance.z = posB.z - posA.z;
+
+			if (sqrtf(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z) <= 1.0f) {
+				// 自弾の衝突時コールバックを呼び出す
+				shotbullet->OnCollision();
+				// 敵弾の衝突時コールバックを呼び出す
+				firebullet->OnCollision();
+			}
+		}
+	}
+
 	#pragma endregion
 }
