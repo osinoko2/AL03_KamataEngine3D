@@ -65,7 +65,7 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 	// ビュープロジェクションの初期化
-	viewProjection_.farZ = 10.0f;
+	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();
 }
 
