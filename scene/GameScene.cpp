@@ -15,6 +15,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete enemy_;
 	delete EnemyModel_;
+	delete modelSkygdome_;
 }
 
 void GameScene::Initialize() {
@@ -28,6 +29,7 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	EnemyModel_ = Model::Create();
+	modelSkygdome_ = Model::CreateFromOBJ("skydome3", true);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -47,6 +49,12 @@ void GameScene::Initialize() {
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 
+	// 天球の生成
+	skydome_ = new Skydome();
+
+	// 天球の初期化
+	skydome_->Initialize(modelSkygdome_, &viewProjection_);
+
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
@@ -55,6 +63,10 @@ void GameScene::Initialize() {
 
 	// 軸方向表示が参照するビュープロジェクションを指定する (アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
+
+	// ビュープロジェクションの初期化
+	viewProjection_.farZ = 10.0f;
+	viewProjection_.Initialize();
 }
 
 void GameScene::Update() {
@@ -66,6 +78,9 @@ void GameScene::Update() {
 	if (enemy_) {
 		enemy_->Update(); 
 	}
+
+	// 天球の更新
+	skydome_->Update();
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_RETURN)) {
@@ -121,6 +136,9 @@ void GameScene::Draw() {
 	if (enemy_) {
 		enemy_->Draw(viewProjection_);
 	}
+
+	// 天球の描画
+	skydome_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

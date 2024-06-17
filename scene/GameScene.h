@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "DebugCamera.h"
 #include "Enemy.h"
+#include "Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -58,6 +59,7 @@ private: // メンバ変数
 	// 3Dモデル
 	Model* model_ = nullptr;
 	Model* EnemyModel_ = nullptr;
+	Model* modelSkygdome_ = nullptr;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
@@ -67,6 +69,9 @@ private: // メンバ変数
 
 	// 敵
 	Enemy* enemy_ = nullptr;
+
+	// 天球
+	Skydome* skydome_ = nullptr;
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;
