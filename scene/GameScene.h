@@ -59,7 +59,7 @@ private: // メンバ変数
 	// 3Dモデル
 	Model* model_ = nullptr;
 	Model* EnemyModel_ = nullptr;
-	Model* modelSkygdome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;

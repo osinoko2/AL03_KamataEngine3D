@@ -15,7 +15,8 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete enemy_;
 	delete EnemyModel_;
-	delete modelSkygdome_;
+	delete skydome_;
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -29,7 +30,7 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	EnemyModel_ = Model::Create();
-	modelSkygdome_ = Model::CreateFromOBJ("skydome3", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome3", true);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -53,7 +54,7 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 
 	// 天球の初期化
-	skydome_->Initialize(modelSkygdome_, &viewProjection_);
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
