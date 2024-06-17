@@ -2,14 +2,17 @@
 #include "Function.h"
 #include <cassert>
 #include "ImGuiManager.h"
+#include "TextureManager.h"
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
+void Player::Initialize(Model* model, Vector3 Position) {
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
 
-	textureHandle_ = textureHandle;
+	textureHandle_ = TextureManager::Load("Rock.png");
+
+	worldTransform_.translation_ = Position;
 
 	worldTransform_.Initialize();
 
@@ -121,6 +124,11 @@ Player::~Player() {
 	bullets_.clear();
 
 	delete bullletmodel_;
+}
+
+void Player::SetParent(const WorldTransform* parent) {
+	// 親子関係を結ぶ
+	worldTransform_.parent_ = parent;
 }
 
 void Player::Rotate() {

@@ -15,7 +15,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete enemy_;
 	delete EnemyModel_;
-	delete modelSkygdome_;
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -24,12 +24,12 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("Rock.png");
+	//textureHandle_ = TextureManager::Load("Rock.png");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	EnemyModel_ = Model::Create();
-	modelSkygdome_ = Model::CreateFromOBJ("skydome3", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome3", true);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -38,7 +38,9 @@ void GameScene::Initialize() {
 	player_ = new Player();
 
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	Vector3 playerPosition(0, 0, 10.0f);
+
+	player_->Initialize(model_, playerPosition);
 
 	// 敵の生成
 	enemy_ = new Enemy();
@@ -53,7 +55,13 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 
 	// 天球の初期化
-	skydome_->Initialize(modelSkygdome_, &viewProjection_);
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
+
+	// レールカメラの生成
+	railCamera_ = new RailCamera();
+
+	// レールカメラの初期化
+	railCamera_->Initialize(worldTransform_, viewProjection_);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -65,8 +73,11 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 	// ビュープロジェクションの初期化
-	viewProjection_.farZ = 10.0f;
+	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();
+
+	// 自キャラとレールカメラの親子関係を結ぶ
+	player_->SetParent(&railCamera_->GetWorldTransform());
 }
 
 void GameScene::Update() {
@@ -81,6 +92,11 @@ void GameScene::Update() {
 
 	// 天球の更新
 	skydome_->Update();
+
+	// レールカメラの更新
+	railCamera_->Update();
+	viewProjection_.matView = railCamera_->GetMatView();
+	viewProjection_.matProjection = railCamera_->GetmatProjection();
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_RETURN)) {
@@ -179,7 +195,7 @@ void GameScene::CheckAllCollisions() {
 		// 敵弾の座標
 		posB = bullet->GetBulletPosition();
 
-		Vector3 distance;
+		Vector3 distance{};
 		distance.x = posB.x - posA.x;
 		distance.y = posB.y - posA.y;
 		distance.z = posB.z - posA.z;
@@ -205,7 +221,7 @@ void GameScene::CheckAllCollisions() {
 		// 自弾の座標
 		posA = bullet->GetBulletPosition();
 
-		Vector3 distance;
+		Vector3 distance{};
 		distance.x = posB.x - posA.x;
 		distance.y = posB.y - posA.y;
 		distance.z = posB.z - posA.z;
@@ -230,7 +246,7 @@ void GameScene::CheckAllCollisions() {
 			// 敵弾の座標
 			posB = firebullet->GetBulletPosition();
 
-			Vector3 distance;
+			Vector3 distance{};
 			distance.x = posB.x - posA.x;
 			distance.y = posB.y - posA.y;
 			distance.z = posB.z - posA.z;
