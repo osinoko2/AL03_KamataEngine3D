@@ -18,7 +18,7 @@ public:
 	/// </summary>
 	void Update();
 
-	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
 	const ViewProjection& GetViewProjection() const { return viewProjection_; }
 

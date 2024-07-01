@@ -42,7 +42,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 
 	// 自キャラの初期化
-	Vector3 playerPosition(0, 0, 10.0f);
+	Vector3 playerPosition(0, 0, 30.0f);
 	player_->Initialize(model_, playerPosition);
 
 	// 敵の生成
