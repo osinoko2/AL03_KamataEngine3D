@@ -10,7 +10,7 @@ void Player::Initialize(Model* model, Vector3 Position) {
 
 	model_ = model;
 
-	textureHandle_ = TextureManager::Load("Rock.png");
+	textureHandle_ = TextureManager::Load("mario.jpg");
 
 	worldTransform_.translation_ = Position;
 
