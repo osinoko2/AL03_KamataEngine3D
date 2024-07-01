@@ -17,7 +17,9 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
 Vector3& operator+=(Vector3& lhv, const Vector3& rhv);
 Vector3& operator*=(Vector3& v, float s);
+Matrix4x4& operator*=(Matrix4x4& m1, const Matrix4x4& m2);
 
 const Vector3 operator+(const Vector3& v1, const Vector3& v2);
 const Vector3 operator*(float s, const Vector3& v);
 const Vector3 operator*(const Vector3& v, float s);
+const Matrix4x4& operator*(const Matrix4x4& m1, const Matrix4x4& m2);
