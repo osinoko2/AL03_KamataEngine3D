@@ -4,13 +4,14 @@
 #include "Input.h"
 #include "PlayerBullet.h"
 #include <list>
+#include "RailCamera.h"
 
 class Player {
 public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, Vector3 Position);
 
 	/// <summary>
 	/// 更新
@@ -31,6 +32,12 @@ public:
 	/// デストラクタ
 	/// </summary>
 	~Player();
+
+	/// <summary>
+	/// 親となるワールドトランスフォームをセット
+	/// </summary>
+	/// <param name="parent">親となるワールドトランスフォーム</param>
+	void SetParent(const WorldTransform* parent);
 
 	void Rotate();
 

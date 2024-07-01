@@ -2,7 +2,6 @@
 #include "AxisIndicator.h"
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
-#include "TextureManager.h"
 #include <cassert>
 #include "Function.h"
 #include <math.h>
@@ -15,7 +14,9 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete enemy_;
 	delete EnemyModel_;
-	delete modelSkygdome_;
+	delete skydome_;
+	delete modelSkydome_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
@@ -24,21 +25,25 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("Rock.png");
+	//textureHandle_ = TextureManager::Load("mario.jpg");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	EnemyModel_ = Model::Create();
-	modelSkygdome_ = Model::CreateFromOBJ("skydome3", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome3", true);
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+	// ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
 
 	// 自キャラの生成
 	player_ = new Player();
 
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	Vector3 playerPosition(0, 0, 10.0f);
+	player_->Initialize(model_, playerPosition);
 
 	// 敵の生成
 	enemy_ = new Enemy();
@@ -53,10 +58,11 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 
 	// 天球の初期化
-	skydome_->Initialize(modelSkygdome_, &viewProjection_);
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+	debugCamera_->SetFarZ(2000.0f);
 
 	// 軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
@@ -65,26 +71,26 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 
 	// ビュープロジェクションの初期化
-	viewProjection_.farZ = 150.0f;
 	viewProjection_.Initialize();
+
+	// レールカメラの生成
+	railCamera_ = new RailCamera();
+
+	// レールカメラの初期化
+	railCamera_->Initialize(Vector3(0, 0, -50), Vector3(0, 0, 0));
+
+	// 自キャラとレールカメラの親子関係を結ぶ
+	player_->SetParent(&railCamera_->GetWorldTransform());
 }
 
 void GameScene::Update() {
 
-	// 自キャラの更新
-	player_->Update();
-
-	// 敵の更新
-	if (enemy_) {
-		enemy_->Update(); 
-	}
-
-	// 天球の更新
-	skydome_->Update();
+	// レールカメラの更新
+	railCamera_->Update();
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_RETURN)) {
-		isDebugCameraActive_ = true;
+		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
 #endif
 
@@ -97,8 +103,21 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	} else {
 		// ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+		viewProjection_.matView = railCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
 	}
+
+	// 自キャラの更新
+	player_->Update();
+
+	// 敵の更新
+	if (enemy_) {
+		enemy_->Update();
+	}
+
+	// 天球の更新
+	skydome_->Update();
 
 	CheckAllCollisions();
 }

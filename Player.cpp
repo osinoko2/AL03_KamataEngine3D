@@ -2,14 +2,17 @@
 #include "Function.h"
 #include <cassert>
 #include "ImGuiManager.h"
+#include "TextureManager.h"
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
+void Player::Initialize(Model* model, Vector3 Position) {
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
 
-	textureHandle_ = textureHandle;
+	textureHandle_ = TextureManager::Load("Rock.png");
+
+	worldTransform_.translation_ = Position;
 
 	worldTransform_.Initialize();
 
@@ -65,6 +68,8 @@ void Player::Update() {
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
+	worldTransform_.UpdateMatrix();
+
 	// キャラクター攻撃処理
 	Attack();
 
@@ -82,7 +87,7 @@ void Player::Update() {
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	// 行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
+	worldTransform_.UpdateMatrix();
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
@@ -104,9 +109,14 @@ void Player::Attack() {
 		// 速度ベクトルを自機の向きに合わせて回転させる
 		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
+		const float kBulletOffset = 5.0f;
+		Vector3 position = GetWorldPosition() + velocity * kBulletOffset;
+
+		velocity *= kBulletSpeed;
+
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(bullletmodel_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(bullletmodel_, position, velocity);
 
 		// 弾の登録する
 		bullets_.push_back(newBullet);
@@ -121,6 +131,11 @@ Player::~Player() {
 	bullets_.clear();
 
 	delete bullletmodel_;
+}
+
+void Player::SetParent(const WorldTransform* parent) {
+	// 親子関係を結ぶ
+	worldTransform_.parent_ = parent;
 }
 
 void Player::Rotate() {
