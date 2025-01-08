@@ -210,6 +210,8 @@ void GameScene::CheckAllCollisions() {
 			player_->OnCollision();
 			// 敵弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
+
+			isOver_ = true;
 		}
 	}
 	#pragma endregion
@@ -234,6 +236,8 @@ void GameScene::CheckAllCollisions() {
 			bullet->OnCollision();
 			// 敵キャラの衝突時コールバックを呼び出す
 			enemy_->OnCollision();
+
+			isClear_ = true;
 		}
 	}
 

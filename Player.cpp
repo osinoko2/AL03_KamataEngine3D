@@ -3,6 +3,7 @@
 #include <cassert>
 #include "ImGuiManager.h"
 #include "TextureManager.h"
+//#include "../External/imgui/imgui.h"
 
 void Player::Initialize(Model* model, Vector3 Position) {
 	// NULLポインタチェック
@@ -10,7 +11,7 @@ void Player::Initialize(Model* model, Vector3 Position) {
 
 	model_ = model;
 
-	textureHandle_ = TextureManager::Load("mario.jpg");
+	textureHandle_ = TextureManager::Load("chara.png");
 
 	worldTransform_.translation_ = Position;
 
@@ -78,10 +79,12 @@ void Player::Update() {
 		bullet->Update();
 	}
 
+	#ifdef _DEBUG
 	// キャラクターの座標を画面表示する処理
 	ImGui::Begin(" ");
 	ImGui::SliderFloat3("Player", &worldTransform_.translation_.x, -40.0f, 40.0f);
 	ImGui::End();
+	#endif
 
 	// アフィン変換行列の作成
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
