@@ -63,6 +63,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// オーディオの初期化
 	audio = Audio::GetInstance();
 	audio->Initialize();
+	audio->PlayWave(audio->LoadWave("BGM.wav"));
 
 	// テクスチャマネージャの初期化
 	TextureManager::GetInstance()->Initialize(dxCommon->GetDevice());
@@ -105,6 +106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->End();
 		// シーン切り替え
 		ChangeScene();
+
 		// 現在シーン更新
 		UpdateScene();
 		// 描画開始

@@ -19,6 +19,10 @@ void Player::Initialize(Model* model, Vector3 Position) {
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
+
+	shotSound_ = Audio::GetInstance();
+	shotSound_->Initialize();
+	shotHandle_ = shotSound_->LoadWave("shot.wav");
 }
 
 void Player::Update() {
@@ -123,6 +127,14 @@ void Player::Attack() {
 
 		// 弾の登録する
 		bullets_.push_back(newBullet);
+
+		isShot_ = true;
+	} else {
+		isShot_ = false;
+	}
+
+	if (isShot_) {
+		shotSound_->PlayWave(shotHandle_);
 	}
 }
 

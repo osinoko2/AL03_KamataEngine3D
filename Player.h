@@ -5,6 +5,7 @@
 #include "PlayerBullet.h"
 #include <list>
 #include "RailCamera.h"
+#include "Audio.h"
 
 class Player {
 public:
@@ -66,4 +67,10 @@ private:
 
 	// 弾
 	std::list<PlayerBullet*> bullets_;
+
+	Audio* shotSound_ = nullptr;
+
+	uint32_t shotHandle_ = 0;
+
+	bool isShot_ = false;
 };
